@@ -74,4 +74,3 @@ def get_sample(df, sampling = "sample_random", k = 1, stratified_col = None):
                 return res_df
             else:
                 raise AssertionError("sampling is illegal")
-
