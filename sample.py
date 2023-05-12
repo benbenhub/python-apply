@@ -28,7 +28,7 @@ def get_sample(df, sampling = "sample_random", k = 1, stratified_col = None):
         assert isinstance(k, int), "在选择抽样个数时,k必须为正整数"
         sample_by_n = True
         if sampling is "stratified":
-            alln = k * df.groupby(by = stratified_col)[stratified_col[0]].count() # sdigsdfsdflkjsf
+            alln = k * df.groupby(by = stratified_col)[stratified_col[0]].count() 
             if alln >= len_df:
                 raise AssertionError("请确认k乘以层数不能超过总样本量")
             else:
