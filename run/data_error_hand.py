@@ -34,7 +34,21 @@ plt.hist(camp['AvgHomeValue'], bins=20, normed=True, range=(camp.AvgHomeValue.mi
 camp['AvgHomeValue'].describe(include='all')
 
 
+# 用盖帽法处理离群值
+def blk(floor, root):
+    def f(x):
+        if x < floor:
+            x = floor
+        elif x > floor:
+            x = root
+        return x
+    return f
 
+q1 = camp['Age'].quantile(0.01) # 计算百分位数
+q99 = camp['Age'].quantile(0.99)
+blk_tot = blk(floor=q1, root=q99)
+camp['Age'] = camp['Age'].map(blk_tot)
+print(camp['Age'].describe())
 
 
 
