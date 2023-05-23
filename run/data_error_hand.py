@@ -49,8 +49,3 @@ q99 = camp['Age'].quantile(0.99)
 blk_tot = blk(floor=q1, root=q99)
 camp['Age'] = camp['Age'].map(blk_tot)
 print(camp['Age'].describe())
-
-
-
-
-
