@@ -7,9 +7,9 @@ path = str(sys.path[0]).replace('\\run','')
 profile = pd.read_csv(path + '/data/profile_telecom.csv')
 
 print(profile.head())
-
+# 分析变量的相关关系
 data = profile.loc[:, 'cnt_call':]
-data.corr(method='pearson')
+print(data.corr(method='pearson'))
 # 数据标准化
 from sklearn.preprocessing import scale
 from sklearn.decomposition import PCA
