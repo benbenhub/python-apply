@@ -6,9 +6,9 @@ import sys
 path = str(sys.path[0]).replace('\\run','')
 profile = pd.read_csv(path + '/data/profile_telecom.csv')
 
-print(profile.head())
-# 分析变量的相关关系
+# print(profile.head())
 data = profile.loc[:, 'cnt_call':]
+# 分析变量的相关关系
 print(data.corr(method='pearson'))
 # 数据标准化
 from sklearn.preprocessing import scale
@@ -20,4 +20,4 @@ pca = PCA(n_components=2, whiten=True).fit(data_scaled)
 
 print(pca.explained_variance_ratio_)
 print(pca.components_)
-print(pca.transform(data_scaled))
+# print(pca.transform(data_scaled))
