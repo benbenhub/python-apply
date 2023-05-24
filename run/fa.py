@@ -23,8 +23,9 @@ fa = FactorAnalysis.load_data_samples(data, preproc_demean=True, preproc_scale=T
 fa.extract_components()
 
 fa.find_comps_to_retain(method='top_n', num_keep=2)
-
+# 通过最大方差进行因子旋转
 fa.rotate_components(method='varimax')
+# 查看因子权重
 pd.DataFrame(fa.comps["rot"])
 
 from pylab import mpl
