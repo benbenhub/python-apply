@@ -33,3 +33,12 @@ anvoa_d_y = ols(formula=formula_d_y, data=df_d).fit()
 anova_results_d_y = anvoa_d_y.summary()
 print(anova_results_d_y)
 
+# 列联表
+# accepts = pd.read_csv(path + '/data/accepts.csv')
+# cross_table = pd.crosstab(accepts.bankruptcy_ind, columns3=accepts.bad_ind, margins=True)
+# print(cross_table)
+# cross_table_rowpct = cross_table.div(cross_table['All'], axis=0)
+# print(cross_table_rowpct)
+
+# # 卡方检验
+# print('chisq = 86.4f\n p-value = $6.4f\n dof = i\n expected_freq = %s', stats.chi2_contingency(cross_table))
