@@ -9,7 +9,7 @@ profile = pd.read_csv(path + '/data/profile_telecom.csv')
 # print(profile.head())
 data = profile.loc[:, 'cnt_call':]
 # 分析变量的相关关系
-print(data.corr(method='pearson'))
+# print(data.corr(method='pearson'))
 # 数据标准化
 from sklearn.preprocessing import scale
 from sklearn.decomposition import PCA
@@ -19,5 +19,5 @@ data_scaled = scale(data)
 pca = PCA(n_components=2, whiten=True).fit(data_scaled)
 
 print(pca.explained_variance_ratio_)
-print(pca.components_)
+# print(pca.components_)
 # print(pca.transform(data_scaled))
