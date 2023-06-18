@@ -47,7 +47,7 @@ data = pd.concat([data_raw, dummy], axis=1)
 
 # 散点图
 import matplotlib.pyplot as plt
-plt.scatter(data['avg_exp'], data['Income'])
+# plt.scatter(data['avg_exp'], data['Income'])
 # plt.show()
 
 # 创建多元线性回归模型
@@ -55,4 +55,40 @@ from statsmodels.formula.api import ols
 LR1 = 'avg_exp~gender+Age+Income+Ownrent+Selfempl+dist_home_val+dist_avg_income+edu_1+edu_2+edu_3+edu_4'
 model = ols(LR1, data=data)
 model = model.fit()
-print(model.summary())
+# print(model.summary())
+
+# 同方差 
+plt.scatter(model.predict(data), model.resid)
+# plt.show()
+
+# 正态分布
+fig = plt.figure()
+res = stats.probplot(model.resid, plot=plt)
+# plt.show() 
+
+# 不满足正态分布 对应变量取对数 重新建模
+data['ln_avg_exp'] = np.log(data['avg_exp'])
+LR2 = 'ln_avg_exp~gender+Age+Income+Ownrent+Selfempl+dist_home_val+edu_1+edu_2+edu_3+edu_4'
+model_2 = ols(LR2, data=data)
+model_2 = model_2.fit()
+fig = plt.figure()
+res = stats.probplot(model_2.resid, plot=plt)
+# plt.show()
+
+# 方差膨胀因子解决共线性 
+from statsmodels.stats.outliers_influence import variance_inflation_factor as vif
+# 手动删除因变量
+data_vif = data.iloc[:,1:]
+# 人工添加截距项
+data_vif['Inter'] = 1
+# print(data_vif)
+# 计算VIF值
+for i in range(0, data.shape[1]):
+    print(data_vif.columns[i], '\t', vif(data_vif.values,i))
+# 其中Income和dist_avg_income对应的方差膨胀因子远远大于10，说明存在共线性
+
+# 去除共线性高的变量重新建模 删除dist_avg_income
+LR3 = 'avg_exp~gender+Age+Income+Ownrent+Selfempl+dist_home_val+edu_1+edu_2+edu_3+edu_4'
+model_3 = ols(LR3, data=data)
+model_3 = model_3.fit()
+print(model_3.summary())
