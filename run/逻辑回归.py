@@ -99,4 +99,37 @@ for i in exog.columns:
 
 train['proba'] = lg_m.predict(train)
 test['proba'] = lg_m.predict(test)
-print(test[['churn', 'proba']].head(10))
+print(test.info())
+
+# ROC曲线
+# 模型的准确率
+# acc_m = sum(test['prediction'] == test['churn']) / np.float(len(test))
+# print('The accurancy is %.2f' %acc_m)
+
+# 混淆矩阵
+test['prediction'] = (test['proba'] > 0.5).astype('int')
+print(pd.crosstab(test.churn, test.prediction, margins=True))
+
+# ROC曲线
+for i in np.arange(0.1, 0.9, 0.1):
+    prediction = (test['proba'] > i).astype('int')
+    confusion_matrix = pd.crosstab(prediction, test.churn, margins=True)
+    precision = confusion_matrix.loc[0, 0] / confusion_matrix.loc['All', 0]
+    recall = confusion_matrix.loc[0, 0] / confusion_matrix.loc[0, 'All']
+    Specificity = confusion_matrix.loc[1, 1] / confusion_matrix.loc[1, 'All']
+    f1_score = 2 * (precision * recall) / (precision + recall)
+    print('threshold:%s, precision:%.2f, recall:%.2f, Specificity:%.2f, f1_score:%.2f' %(i, precision, recall, Specificity, f1_score))
+
+import sklearn.metrics as metrics
+fpr_test, tpr_test, th_test = metrics.roc_curve(test.churn, test.proba)
+fpr_train, tpr_train, th_train = metrics.roc_curve(train.churn, train.proba)
+
+print('AUC = %.4f' %metrics.auc(fpr_test, tpr_test))
+# 计算最优阈值
+print(th_test[(tpr_test - fpr_test).argmax()])
+
+plt.figure(figsize=[3, 3])
+plt.plot(fpr_test, tpr_test, 'b--')
+plt.plot(fpr_train, tpr_train, 'r-')
+plt.title('ROC curve')
+plt.show()
